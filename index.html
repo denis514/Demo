@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tilauslomake</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
+    <h2 class="text-2xl font-bold mb-6 text-center">Tilauslomake</h2>
+
+    <form id="tilauslomake" class="space-y-4" autocomplete="off">
+      <input type="text" placeholder="Etunimi" inputmode="text" enterkeyhint="next" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="text" placeholder="Sukunimi" inputmode="text" enterkeyhint="next" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="email" placeholder="Sähköpostiosoite" inputmode="email" enterkeyhint="next" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+      <input type="tel" placeholder="Puhelinnumero" inputmode="tel" enterkeyhint="done" class="w-full px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+      <button id="vahvista-painike" type="button" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition font-semibold">
+        Jatka
+      </button>
+    </form>
+
+    <div id="viesti" class="hidden mt-4 bg-green-100 border border-green-500 text-green-800 text-center py-2 px-4 rounded-md">
+      ✅ Lomake lähetetty!
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const kentat = document.querySelectorAll('input');
+      const painike = document.getElementById('vahvista-painike');
+      const viesti = document.getElementById('viesti');
+
+      // Enter → siirry seuraavaan kenttään (toimii myös mobiilissa)
+      kentat.forEach((kentta, indeksi) => {
+        kentta.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const seuraava = kentat[indeksi + 1];
+            if (seuraava) {
+              seuraava.focus();
+            } else {
+              painike.focus();
+            }
+          }
+        });
+      });
+
+      // Käsittele myös painike
+      painike.addEventListener('click', () => {
+        viesti.classList.remove('hidden');
+        viesti.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        setTimeout(() => {
+          viesti.classList.add('hidden');
+        }, 3000);
+      });
+
+      // Varalla: Enter painikkeella (iOS ei aina laukaise keydown)
+      painike.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          painike.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
